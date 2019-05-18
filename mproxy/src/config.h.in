@@ -1,0 +1,11 @@
+﻿#ifndef _redis_proxy_config_h_
+#define _redis_proxy_config_h_
+
+#define MUDIS_VERSION "${version}"
+#define LIBMILK_VERSION "${LIBMILK_VERSION}"
+
+
+
+${CMAKE_CONFIG_MACROS}
+
+#endif

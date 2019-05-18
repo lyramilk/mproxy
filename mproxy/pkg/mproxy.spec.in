@@ -1,0 +1,65 @@
+Name:		mproxy
+%global	CMakeListPath	%{?_sourcedir}/%{?name}
+Version:	%(awk 'match($0,"set\\s*\\(version\\s*(.*)\\)",mr) {print mr[1]}' %{CMakeListPath}/CMakeLists.txt)
+Release:	1%{?dist}
+Summary:	Redis proxy by lyramilk
+Vendor:		lyramilk
+URL:		http://www.lyramilk.com/
+Group:		Development/Libraries
+License:	ASL 2.0
+
+BuildRequires:	gcc-c++ >= 4.4.6 ${CMAKE_BUILD_DEPENDS}
+Requires:	${CMAKE_RUN_DEPENDS}
+Prefix:		%{_prefix}
+Prefix:		%{_sysconfdir}
+
+%description
+
+
+%build
+	mkdir -p %{?_builddir}/%{?name}
+	cd %{?_builddir}/%{?name}
+	cmake3 -D install_dir=%{?_builddir}/%{?name}/output -D release=1 %{CMakeListPath}
+	make
+	make install
+	tree %{?_builddir}/%{?name}/output
+%install
+	mkdir -p %{?buildroot}%{?_bindir}
+	mkdir -p %{?buildroot}%{?_initddir}
+	mkdir -p %{?buildroot}%{?_sysconfdir}
+
+	mv %{?_builddir}/%{?name}/output/%{?name}d %{?buildroot}%{?_bindir}
+	mv %{?_builddir}/%{?name}/output/%{?name}d.sh %{?buildroot}%{?_initddir}/%{?name}d
+	mv %{?_builddir}/%{?name}/output/%{?name}.yaml %{?buildroot}%{?_sysconfdir}
+	
+
+	
+
+#清理
+%clean
+
+#安装之前执行脚本
+%pre
+
+#安装之后执行脚本
+%post
+
+#卸载之前执行脚本
+%preun
+	chkconfig mproxyd off
+	service mproxyd stop
+#卸载之后执行脚本
+%postun
+
+#需要文件
+%files
+	%defattr(-,root,root,-)
+	%{?_bindir}/%{?name}d
+	%attr(751,root,root) %{?_initddir}/%{?name}d
+	%{?_sysconfdir}/%{?name}.yaml
+#更新日志
+%changelog
+	*Thu Sep 17 2015 打包格式更新
+	-修改了rpmbuild打包方法以支持多版本并存
+	*Tue Aug 25 2015 打包格式更新
+	-修改了rpmbuild打包方法

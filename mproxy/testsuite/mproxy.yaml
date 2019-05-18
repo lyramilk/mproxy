@@ -1,0 +1,6 @@
+server: 
+  thread: 4	# thread 线程数
+  port: 6001	# port 端口
+  host: 0.0.0.0	# 绑定ip地址
+  pidfile: /tmp/mproxy.pid
+  logfile: /tmp/mproxy.?.log
